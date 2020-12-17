@@ -47,7 +47,7 @@ lazy val root =
 lazy val price =
   (project in file("price"))
     .settings(name := "price")
-    .settings(version := "0.0.0")
+    .settings(version := "0.0.1")
     .settings(commonSettings)
     .settings(
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
@@ -67,7 +67,7 @@ lazy val price =
 lazy val stdList =
   (project in file("std/list"))
     .settings(name := "std.list")
-    .settings(version := "0.0.0")
+    .settings(version := "0.0.1")
     .settings(commonSettings)
     .settings(
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
