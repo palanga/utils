@@ -1,4 +1,4 @@
-package util
+package palanga.util
 
 // TODO remove exponential complexity in CompoundPrice operations
 // TODO use a real NonEmptyList
@@ -71,7 +71,7 @@ object price {
       override def *(factor: BigDecimal): Price = copy(prices.map(_ * factor).asInstanceOf[::[SinglePrice]])
 
       override def to(currency: Currency): Rates => Option[SinglePrice] = {
-        import util.std.list.syntax.ListOps
+        import palanga.util.std.list.syntax.ListOps
         rates =>
           prices
             .map(_.to(currency)(rates))

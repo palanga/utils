@@ -1,4 +1,4 @@
-package util.std.list
+package palanga.util.std.list
 
 object syntax {
 

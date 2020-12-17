@@ -1,7 +1,7 @@
-package util
+package palanga.util
 
-import util.price.Currency._
-import util.price._
+import palanga.util.price.Currency._
+import palanga.util.price._
 import zio.test.Assertion.{ equalTo, isLessThan, isSome }
 import zio.test._
 
