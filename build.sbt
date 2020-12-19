@@ -1,7 +1,8 @@
 val mainScala = "2.13.4"
 val allScala  = Seq(mainScala)
 
-val zioVersion = "1.0.3"
+val calibanVersion = "0.9.4"
+val zioVersion     = "1.0.3"
 
 inThisBuild(
   List(
@@ -41,6 +42,7 @@ lazy val root =
     .settings(historyPath := None)
     .aggregate(
       price,
+      server,
       stdList,
     )
 
@@ -61,7 +63,24 @@ lazy val price =
       fork in run := true,
     )
     .dependsOn(
-      stdList,
+      stdList
+    )
+
+lazy val server =
+  (project in file("server"))
+    .settings(name := "caliban-http4s-graphql-server")
+    .settings(version := "0.0.1")
+    .settings(commonSettings)
+    .settings(
+      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+      libraryDependencies ++= Seq(
+        "com.github.ghostdogpr" %% "caliban"        % calibanVersion,
+        "com.github.ghostdogpr" %% "caliban-http4s" % calibanVersion,
+      ),
+    )
+    .settings(
+      fork in Test := true,
+      fork in run := true,
     )
 
 lazy val stdList =
