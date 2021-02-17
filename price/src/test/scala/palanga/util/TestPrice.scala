@@ -73,7 +73,7 @@ object TestPrice extends DefaultRunnableSpec {
       },
       test("multiplying") {
         val actualPrice   = (ARS * 100 + EUR * 10) * 2
-        val expectedPrice = (ARS * 200 + EUR * 20)
+        val expectedPrice = ARS * 200 + EUR * 20
         assert(actualPrice)(equalTo(expectedPrice))
       },
       test("complex operation") {

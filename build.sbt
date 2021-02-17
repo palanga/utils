@@ -1,6 +1,6 @@
 name := "aconcagua"
 
-val aconcaguaVersion = "0.0.1"
+val aconcaguaVersion = "0.0.2"
 
 val mainScala = "2.13.4"
 val allScala  = Seq(mainScala)
@@ -9,18 +9,20 @@ val priceVersion   = "0.0.1"
 val stdListVersion = "0.0.1"
 
 val calibanVersion = "0.9.4"
+val uzhttpVersion  = "0.2.6"
 val zioVersion     = "1.0.3"
+val zioZmxVersion  = "0.0.4+69-01a7e756-SNAPSHOT"
 
 inThisBuild(
   List(
     organization := "dev.palanga",
-    homepage := Some(url("https://github.com/palanga/utils")),
+    homepage := Some(url("https://github.com/palanga/aconcagua")),
     licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     parallelExecution in Test := false,
     scmInfo := Some(
       ScmInfo(
-        url("https://github.com/palanga/utils/"),
-        "scm:git:git@github.com:palanga/utils.git",
+        url("https://github.com/palanga/aconcagua/"),
+        "scm:git:git@github.com:palanga/aconcagua.git",
       )
     ),
     developers := List(
@@ -44,7 +46,8 @@ lazy val root =
     .settings(skip in publish := true)
     .aggregate(
       price,
-      server,
+      core,
+      serverExamples,
       stdList,
     )
 
@@ -68,9 +71,9 @@ lazy val price =
       stdList
     )
 
-lazy val server =
-  (project in file("server"))
-    .settings(name := "aconcagua")
+lazy val core =
+  (project in file("core"))
+    .settings(name := "core")
     .settings(version := aconcaguaVersion)
     .settings(commonSettings)
     .settings(
@@ -78,11 +81,31 @@ lazy val server =
       libraryDependencies ++= Seq(
         "com.github.ghostdogpr" %% "caliban"        % calibanVersion,
         "com.github.ghostdogpr" %% "caliban-http4s" % calibanVersion,
+        "dev.zio"               %% "zio-zmx"        % zioZmxVersion,
+        "org.polynote"          %% "uzhttp"         % uzhttpVersion,
       ),
     )
     .settings(
       fork in Test := true,
       fork in run := true,
+    )
+
+lazy val serverExamples =
+  (project in file("examples/server"))
+    .settings(name := "server-examples")
+    .settings(commonSettings)
+    .settings(
+      libraryDependencies ++= Seq(
+        "ch.qos.logback" % "logback-classic" % "1.2.3"
+      )
+    )
+    .settings(
+      fork in Test := true,
+      fork in run := true,
+      skip in publish := true,
+    )
+    .dependsOn(
+      core
     )
 
 lazy val stdList =
@@ -107,7 +130,8 @@ val commonSettings =
     scalaVersion := mainScala,
     crossScalaVersions := allScala,
     libraryDependencies += compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
-    resolvers += Resolver.bintrayRepo("palanga", "maven"),
+    resolvers += "Artifactory" at "https://palanga.jfrog.io/artifactory/maven/",
+    resolvers += Resolver.sonatypeRepo("snapshots"),
     scalacOptions ++= Seq(
       "-deprecation",
       "-encoding",

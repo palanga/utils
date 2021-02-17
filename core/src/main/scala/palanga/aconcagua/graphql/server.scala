@@ -1,4 +1,4 @@
-package palanga.caliban.http4s
+package palanga.aconcagua.graphql
 
 import caliban.wrappers.Wrapper.OverallWrapper
 import caliban.{ GraphQL, Http4sAdapter }
@@ -13,7 +13,7 @@ import zio.{ Chunk, Has, RIO, Runtime, ZEnv, ZIO }
 import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext
 
-object server {
+private object server {
 
   def run[R <: Has[_]](
     api: GraphQL[R],
@@ -29,16 +29,16 @@ object server {
           _           <- zio.console putStrLn api.render
           interpreter <- api.withWrapper(printErrors).interpreter
           _           <- BlazeServerBuilder[RTask](executionContext(runtime))
-                 .bindHttp(port, host)
-                 .withHttpApp(
-                   Router[RTask](
-                     "/api/graphql" -> CORS(Http4sAdapter makeHttpService interpreter),
-                     "/ws/graphql"  -> CORS(Http4sAdapter makeWebSocketService interpreter),
-                   ).orNotFound
-                 )
-                 .resource
-                 .toManaged
-                 .useForever
+                           .bindHttp(port, host)
+                           .withHttpApp(
+                             Router[RTask](
+                               "/api/graphql" -> CORS(Http4sAdapter makeHttpService interpreter),
+                               "/ws/graphql"  -> CORS(Http4sAdapter makeWebSocketService interpreter),
+                             ).orNotFound
+                           )
+                           .resource
+                           .toManaged
+                           .useForever
         } yield ()
       }
   }
@@ -52,6 +52,7 @@ object server {
       )
     }
 
+  // TODO remove when my pr gets merged
   private def prettyStackStrace(t: Throwable): Chunk[String] = {
     @tailrec def go(acc: Chunk[String], t: Throwable): Chunk[String] =
       if (t == null) acc
