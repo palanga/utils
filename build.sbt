@@ -1,5 +1,12 @@
+name := "aconcagua"
+
+val aconcaguaVersion = "0.0.1"
+
 val mainScala = "2.13.4"
 val allScala  = Seq(mainScala)
+
+val priceVersion   = "0.0.1"
+val stdListVersion = "0.0.1"
 
 val calibanVersion = "0.9.4"
 val zioVersion     = "1.0.3"
@@ -10,9 +17,6 @@ inThisBuild(
     homepage := Some(url("https://github.com/palanga/utils")),
     licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     parallelExecution in Test := false,
-    pgpPassphrase := sys.env.get("PGP_PASSWORD").map(_.toArray),
-    pgpPublicRing := file("/tmp/public.asc"),
-    pgpSecretRing := file("/tmp/secret.asc"),
     scmInfo := Some(
       ScmInfo(
         url("https://github.com/palanga/utils/"),
@@ -27,19 +31,17 @@ inThisBuild(
         url("https://github.com/palanga"),
       )
     ),
+    publishTo := Some("Artifactory Realm" at "https://palanga.jfrog.io/artifactory/maven/"),
+    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
   )
 )
-
-ThisBuild / publishTo := sonatypePublishToBundle.value
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
 
 lazy val root =
   (project in file("."))
-    .settings(name := "utils")
     .settings(skip in publish := true)
-    .settings(historyPath := None)
     .aggregate(
       price,
       server,
@@ -49,7 +51,7 @@ lazy val root =
 lazy val price =
   (project in file("price"))
     .settings(name := "price")
-    .settings(version := "0.0.1")
+    .settings(version := priceVersion)
     .settings(commonSettings)
     .settings(
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
@@ -68,8 +70,8 @@ lazy val price =
 
 lazy val server =
   (project in file("server"))
-    .settings(name := "caliban-http4s-graphql-server")
-    .settings(version := "0.0.1")
+    .settings(name := "aconcagua")
+    .settings(version := aconcaguaVersion)
     .settings(commonSettings)
     .settings(
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
@@ -86,7 +88,7 @@ lazy val server =
 lazy val stdList =
   (project in file("std/list"))
     .settings(name := "std.list")
-    .settings(version := "0.0.1")
+    .settings(version := stdListVersion)
     .settings(commonSettings)
     .settings(
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
