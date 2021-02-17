@@ -2,11 +2,11 @@ name := "aconcagua"
 
 val aconcaguaVersion = "0.0.2"
 
+val priceVersion   = "0.0.2"
+val stdListVersion = "0.0.2"
+
 val mainScala = "2.13.4"
 val allScala  = Seq(mainScala)
-
-val priceVersion   = "0.0.1"
-val stdListVersion = "0.0.1"
 
 val calibanVersion = "0.9.4"
 val uzhttpVersion  = "0.2.6"
