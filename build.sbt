@@ -73,7 +73,7 @@ lazy val price =
 
 lazy val core =
   (project in file("core"))
-    .settings(name := "core")
+    .settings(name := "aconcagua")
     .settings(version := aconcaguaVersion)
     .settings(commonSettings)
     .settings(
