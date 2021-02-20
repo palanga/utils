@@ -45,25 +45,23 @@ lazy val root =
   (project in file("."))
     .settings(skip in publish := true)
     .aggregate(
-      price,
       core,
+      price,
       serverExamples,
       stdList,
     )
 
 lazy val price =
   (project in file("price"))
-    .settings(name := "price")
-    .settings(version := priceVersion)
     .settings(commonSettings)
     .settings(
-      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+      name := "price",
+      version := priceVersion,
       libraryDependencies ++= Seq(
         "dev.zio" %% "zio-test"     % zioVersion % "test",
         "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
       ),
-    )
-    .settings(
+      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
       fork in run := true,
     )
@@ -73,33 +71,29 @@ lazy val price =
 
 lazy val core =
   (project in file("core"))
-    .settings(name := "aconcagua")
-    .settings(version := aconcaguaVersion)
     .settings(commonSettings)
     .settings(
-      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+      name := "aconcagua",
+      version := aconcaguaVersion,
       libraryDependencies ++= Seq(
         "com.github.ghostdogpr" %% "caliban"        % calibanVersion,
         "com.github.ghostdogpr" %% "caliban-http4s" % calibanVersion,
         "dev.zio"               %% "zio-zmx"        % zioZmxVersion,
         "org.polynote"          %% "uzhttp"         % uzhttpVersion,
       ),
-    )
-    .settings(
+      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
       fork in run := true,
     )
 
 lazy val serverExamples =
   (project in file("examples/server"))
-    .settings(name := "server-examples")
     .settings(commonSettings)
     .settings(
+      name := "server-examples",
       libraryDependencies ++= Seq(
         "ch.qos.logback" % "logback-classic" % "1.2.3"
-      )
-    )
-    .settings(
+      ),
       fork in Test := true,
       fork in run := true,
       skip in publish := true,
@@ -110,17 +104,15 @@ lazy val serverExamples =
 
 lazy val stdList =
   (project in file("std/list"))
-    .settings(name := "std.list")
-    .settings(version := stdListVersion)
     .settings(commonSettings)
     .settings(
-      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+      name := "std.list",
+      version := stdListVersion,
       libraryDependencies ++= Seq(
         "dev.zio" %% "zio-test"     % zioVersion % "test",
         "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
       ),
-    )
-    .settings(
+      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
       fork in run := true,
     )
