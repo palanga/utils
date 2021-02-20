@@ -1,13 +1,13 @@
-package palanga.examples.server
+package examples
 
 import caliban.GraphQL.graphQL
 import caliban.schema.GenericSchema
 import caliban.{ GraphQL, RootResolver }
 import palanga.aconcagua
-import zio._
 import zio.stream.ZStream
+import zio.{ ExitCode, Task, URIO, ZIO }
 
-object SimpleExample extends zio.App {
+object GraphqlExample extends zio.App {
 
   case class Painter(paintings: Set[Painting], name: Name)
 

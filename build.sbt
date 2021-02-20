@@ -9,6 +9,7 @@ val mainScala = "2.13.4"
 val allScala  = Seq(mainScala)
 
 val calibanVersion = "0.9.4"
+val grpcVersion    = "1.35.0"
 val uzhttpVersion  = "0.2.6"
 val zioVersion     = "1.0.3"
 val zioZmxVersion  = "0.0.4+69-01a7e756-SNAPSHOT"
@@ -76,10 +77,16 @@ lazy val core =
       name := "aconcagua",
       version := aconcaguaVersion,
       libraryDependencies ++= Seq(
-        "com.github.ghostdogpr" %% "caliban"        % calibanVersion,
-        "com.github.ghostdogpr" %% "caliban-http4s" % calibanVersion,
-        "dev.zio"               %% "zio-zmx"        % zioZmxVersion,
-        "org.polynote"          %% "uzhttp"         % uzhttpVersion,
+        "com.github.ghostdogpr" %% "caliban"              % calibanVersion,
+        "com.github.ghostdogpr" %% "caliban-http4s"       % calibanVersion,
+        "dev.zio"               %% "zio-zmx"              % zioZmxVersion,
+        "org.polynote"          %% "uzhttp"               % uzhttpVersion,
+        "com.thesamet.scalapb"  %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
+        "io.grpc"                % "grpc-netty"           % grpcVersion,
+      ),
+      PB.targets in Compile := Seq(
+        scalapb.gen(grpc = true)          -> (sourceManaged in Compile).value,
+        scalapb.zio_grpc.ZioCodeGenerator -> (sourceManaged in Compile).value,
       ),
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
@@ -93,6 +100,10 @@ lazy val serverExamples =
       name := "server-examples",
       libraryDependencies ++= Seq(
         "ch.qos.logback" % "logback-classic" % "1.2.3"
+      ),
+      PB.targets in Compile := Seq(
+        scalapb.gen(grpc = true)          -> (sourceManaged in Compile).value,
+        scalapb.zio_grpc.ZioCodeGenerator -> (sourceManaged in Compile).value,
       ),
       fork in Test := true,
       fork in run := true,

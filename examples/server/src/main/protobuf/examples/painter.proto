@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package examples;
+
+message Painter {
+  required string name = 1;
+  repeated string paintings = 2;
+}
+
+message PainterRequest {
+  required string name = 1;
+}
+
+message Empty {}
+
+service Painters {
+  rpc PainterByName(PainterRequest) returns (Painter);
+  rpc Painters(Empty) returns (stream Painter);
+}
+
+message Museum {
+  required string name = 1 [default = ""];
+  repeated string paintings = 2;
+}
+
+service Museums {
+  rpc Museums(Empty) returns (stream Museum);
+}
