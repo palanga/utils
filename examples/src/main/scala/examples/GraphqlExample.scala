@@ -50,8 +50,8 @@ object GraphqlExample extends zio.App {
   }
 
   override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
-    aconcagua.app
-      .graphql(ExampleApi.api)
+    aconcagua.graphql
+      .app(ExampleApi.api)
       .withDefaultMetrics
       .instrumented
       .run

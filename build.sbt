@@ -1,18 +1,18 @@
 name := "aconcagua"
 
-val aconcaguaVersion = "0.0.2"
+val ACONCAGUA_VERSION = "0.0.2"
 
-val priceVersion   = "0.0.2"
-val stdListVersion = "0.0.2"
+val PRICE_VERSION    = "0.0.2"
+val STD_LIST_VERSION = "0.0.2"
 
 val mainScala = "2.13.4"
 val allScala  = Seq(mainScala)
 
-val calibanVersion = "0.9.4"
-val grpcVersion    = "1.35.0"
-val uzhttpVersion  = "0.2.6"
-val zioVersion     = "1.0.3"
-val zioZmxVersion  = "0.0.4+69-01a7e756-SNAPSHOT"
+val CALIBAN_VERSION = "0.9.4"
+val GRPC_VERSION    = "1.35.0"
+val UZHTTP_VERSION  = "0.2.6"
+val ZIO_VERSION     = "1.0.3"
+val ZIO_ZMX_VERSION = "0.0.4+69-01a7e756-SNAPSHOT"
 
 inThisBuild(
   List(
@@ -47,9 +47,11 @@ lazy val root =
     .settings(skip in publish := true)
     .aggregate(
       core,
+      graphql,
+      grpc,
       examples,
       price,
-      stdList,
+      std_list,
     )
 
 lazy val price =
@@ -57,17 +59,17 @@ lazy val price =
     .settings(commonSettings)
     .settings(
       name := "price",
-      version := priceVersion,
+      version := PRICE_VERSION,
       libraryDependencies ++= Seq(
-        "dev.zio" %% "zio-test"     % zioVersion % "test",
-        "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
+        "dev.zio" %% "zio-test"     % ZIO_VERSION % "test",
+        "dev.zio" %% "zio-test-sbt" % ZIO_VERSION % "test",
       ),
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
       fork in run := true,
     )
     .dependsOn(
-      stdList
+      std_list
     )
 
 lazy val core =
@@ -75,14 +77,48 @@ lazy val core =
     .settings(commonSettings)
     .settings(
       name := "aconcagua",
-      version := aconcaguaVersion,
+      version := ACONCAGUA_VERSION,
       libraryDependencies ++= Seq(
-        "com.github.ghostdogpr" %% "caliban"              % calibanVersion,
-        "com.github.ghostdogpr" %% "caliban-http4s"       % calibanVersion,
-        "dev.zio"               %% "zio-zmx"              % zioZmxVersion,
-        "org.polynote"          %% "uzhttp"               % uzhttpVersion,
+        "com.github.ghostdogpr" %% "caliban"              % CALIBAN_VERSION,
+        "com.github.ghostdogpr" %% "caliban-http4s"       % CALIBAN_VERSION,
+        "dev.zio"               %% "zio-zmx"              % ZIO_ZMX_VERSION,
+        "org.polynote"          %% "uzhttp"               % UZHTTP_VERSION,
         "com.thesamet.scalapb"  %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
-        "io.grpc"                % "grpc-netty"           % grpcVersion,
+        "io.grpc"                % "grpc-netty"           % GRPC_VERSION,
+      ),
+      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+      fork in Test := true,
+      fork in run := true,
+      skip in publish := true,
+    )
+
+lazy val graphql =
+  (project in file("graphql"))
+    .settings(commonSettings)
+    .settings(
+      name := "aconcagua-graphql",
+      version := ACONCAGUA_VERSION,
+      libraryDependencies ++= Seq(
+        "com.github.ghostdogpr" %% "caliban"        % CALIBAN_VERSION,
+        "com.github.ghostdogpr" %% "caliban-http4s" % CALIBAN_VERSION,
+      ),
+      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+      fork in Test := true,
+      fork in run := true,
+    )
+    .dependsOn(
+      core
+    )
+
+lazy val grpc =
+  (project in file("grpc"))
+    .settings(commonSettings)
+    .settings(
+      name := "aconcagua-grpc",
+      version := ACONCAGUA_VERSION,
+      libraryDependencies ++= Seq(
+        "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
+        "io.grpc"               % "grpc-netty"           % GRPC_VERSION,
       ),
       PB.targets in Compile := Seq(
         scalapb.gen(grpc = true)          -> (sourceManaged in Compile).value,
@@ -91,6 +127,9 @@ lazy val core =
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
       fork in run := true,
+    )
+    .dependsOn(
+      core
     )
 
 lazy val examples =
@@ -110,18 +149,19 @@ lazy val examples =
       skip in publish := true,
     )
     .dependsOn(
-      core
+      graphql,
+      grpc,
     )
 
-lazy val stdList =
+lazy val std_list =
   (project in file("std/list"))
     .settings(commonSettings)
     .settings(
-      name := "std.list",
-      version := stdListVersion,
+      name := "std-list",
+      version := STD_LIST_VERSION,
       libraryDependencies ++= Seq(
-        "dev.zio" %% "zio-test"     % zioVersion % "test",
-        "dev.zio" %% "zio-test-sbt" % zioVersion % "test",
+        "dev.zio" %% "zio-test"     % ZIO_VERSION % "test",
+        "dev.zio" %% "zio-test-sbt" % ZIO_VERSION % "test",
       ),
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,

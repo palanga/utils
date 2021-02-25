@@ -1,8 +1,8 @@
 package examples
 
+import examples.painter.ZioPainter.PaintersClient
 import examples.painter.Empty
 import io.grpc.ManagedChannelBuilder
-import examples.painter.ZioPainter.PaintersClient
 import zio.{ ExitCode, URIO }
 
 // TODO esto es una verga

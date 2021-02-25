@@ -1,6 +1,7 @@
-package palanga.aconcagua.graphql
+package palanga.aconcagua
 
-import InstrumentedGraphQLApp.defaultPrometheusInstrumentation
+import palanga._
+import palanga.aconcagua.InstrumentedApp.defaultPrometheusInstrumentation
 import uzhttp.Response
 import uzhttp.server.Server
 import zio.stream.ZSink
@@ -11,15 +12,15 @@ import zio.{ Chunk, Has, ZEnv, ZIO }
 import java.net.InetSocketAddress
 import scala.language.postfixOps
 
-case class InstrumentedGraphQLApp[R <: Has[_]](
-  appBuilder: GraphQLApp[R],
-  host: String = "localhost",
-  port: Int = 8080,
-) {
+case class InstrumentedApp[-R <: Has[_]](
+  private val app: aconcagua.App[R],
+  private val host: String = "localhost",
+  private val port: Int = 8080,
+) extends {
 
-  def withDefaultMetrics            = copy(appBuilder = appBuilder.withDefaultMetrics)
-  def withMetricsHost(host: String) = copy(host = host)
-  def withMetricsPort(port: Int)    = copy(port = port)
+  def withDefaultMetrics: InstrumentedApp[R]            = copy(app = app.withDefaultMetrics)
+  def withMetricsHost(host: String): InstrumentedApp[R] = copy(host = host)
+  def withMetricsPort(port: Int): InstrumentedApp[R]    = copy(port = port)
 
   def run: ZIO[ZEnv with R, Throwable, (Unit, Unit)] = {
 
@@ -30,7 +31,7 @@ case class InstrumentedGraphQLApp[R <: Has[_]](
     for {
       instrumentation <- defaultPrometheusInstrumentation
       metrics         <- ZMX.channel.eventStream.run(eventSink(instrumentation)).fork
-      result          <- appBuilder.run <&> metricsServer(instrumentation)
+      result          <- app.run <&> metricsServer(instrumentation)
       _               <- ZMX.channel.flushMetrics(10 seconds)
       _               <- metrics.interrupt
     } yield result
@@ -51,7 +52,7 @@ case class InstrumentedGraphQLApp[R <: Has[_]](
 
 }
 
-object InstrumentedGraphQLApp {
+object InstrumentedApp {
 
   // TODO prometheus provides a default config ?
   private val config =
@@ -60,6 +61,7 @@ object InstrumentedGraphQLApp {
       quantiles = Chunk(_ => Some(PrometheusConfig.defaultQuantiles)),
     )
 
-  private val defaultPrometheusInstrumentation = PrometheusRegistry.make(config).map(new PrometheusInstrumentaion(_))
+  private val defaultPrometheusInstrumentation =
+    PrometheusRegistry.make(config).map(new PrometheusInstrumentaion(_))
 
 }

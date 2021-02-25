@@ -1,21 +1,21 @@
 package examples
 
-import examples.painter.ZioPainter.{ ZMuseums, ZPainters }
 import examples.painter.{ Empty, Museum, Painter, PainterRequest }
+import examples.painter.ZioPainter.{ ZMuseums, ZPainters }
 import io.grpc.Status
 import palanga.aconcagua
-import scalapb.zio_grpc.ServiceList
+import scalapb.zio_grpc.{ GenericBindable, ServiceList, TransformableService, ZBindableService, ZGeneratedService }
 import zio.stream.ZStream
 import zio.{ ExitCode, Task, URIO, ZEnv, ZIO }
 
 object GrpcExample extends zio.App {
 
   override def run(args: List[String]): URIO[ZEnv, ExitCode] =
-    aconcagua.app
-      .grpc(ServiceList add PaintersService add MuseumsService)
+    aconcagua.grpc
+      .app(ServiceList add PaintersService add MuseumsService)
       .withPort(9000)
-//      .withDefaultMetrics
-//      .instrumented
+      //      .withDefaultMetrics
+      .instrumented
       .run
       .exitCode
 
