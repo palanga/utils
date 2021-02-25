@@ -1,6 +1,6 @@
 name := "aconcagua"
 
-val ACONCAGUA_VERSION = "0.0.2"
+val ACONCAGUA_VERSION = "0.1.0"
 
 val PRICE_VERSION    = "0.0.2"
 val STD_LIST_VERSION = "0.0.2"
@@ -76,15 +76,11 @@ lazy val core =
   (project in file("core"))
     .settings(commonSettings)
     .settings(
-      name := "aconcagua",
+      name := "aconcagua-core",
       version := ACONCAGUA_VERSION,
       libraryDependencies ++= Seq(
-        "com.github.ghostdogpr" %% "caliban"              % CALIBAN_VERSION,
-        "com.github.ghostdogpr" %% "caliban-http4s"       % CALIBAN_VERSION,
-        "dev.zio"               %% "zio-zmx"              % ZIO_ZMX_VERSION,
-        "org.polynote"          %% "uzhttp"               % UZHTTP_VERSION,
-        "com.thesamet.scalapb"  %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
-        "io.grpc"                % "grpc-netty"           % GRPC_VERSION,
+        "dev.zio"      %% "zio-zmx" % ZIO_ZMX_VERSION,
+        "org.polynote" %% "uzhttp"  % UZHTTP_VERSION,
       ),
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
