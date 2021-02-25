@@ -47,8 +47,8 @@ lazy val root =
     .settings(skip in publish := true)
     .aggregate(
       core,
+      examples,
       price,
-      serverExamples,
       stdList,
     )
 
@@ -93,11 +93,11 @@ lazy val core =
       fork in run := true,
     )
 
-lazy val serverExamples =
-  (project in file("examples/server"))
+lazy val examples =
+  (project in file("examples"))
     .settings(commonSettings)
     .settings(
-      name := "server-examples",
+      name := "examples",
       libraryDependencies ++= Seq(
         "ch.qos.logback" % "logback-classic" % "1.2.3"
       ),
