@@ -5,8 +5,8 @@ val ACONCAGUA_VERSION = "0.1.0"
 val PRICE_VERSION    = "0.0.2"
 val STD_LIST_VERSION = "0.0.2"
 
-val mainScala = "2.13.4"
-val allScala  = Seq(mainScala)
+val MAIN_SCALA = "2.13.5"
+val ALL_SCALA  = Seq(MAIN_SCALA)
 
 val CALIBAN_VERSION = "0.9.4"
 val GRPC_VERSION    = "1.35.0"
@@ -166,8 +166,8 @@ lazy val std_list =
 
 val commonSettings =
   Def.settings(
-    scalaVersion := mainScala,
-    crossScalaVersions := allScala,
+    scalaVersion := MAIN_SCALA,
+    crossScalaVersions := ALL_SCALA,
     libraryDependencies += compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
     resolvers += "Artifactory" at "https://palanga.jfrog.io/artifactory/maven/",
     resolvers += Resolver.sonatypeRepo("snapshots"),
