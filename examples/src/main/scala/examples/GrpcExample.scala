@@ -52,8 +52,8 @@ object GrpcExample extends zio.App {
 
     private val museum_data =
       List(
-        Museum("Marmothan Monet", "Impression Soleil Levant" :: Nil),
         Museum("Museo de Arte Moderno de Mexico", "La Huida" :: "Mujer Saliendo del Psicoanalista" :: Nil),
+        Museum("Marmothan Monet", "Impression Soleil Levant" :: Nil),
       )
 
     object museums {

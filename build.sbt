@@ -8,6 +8,8 @@ val STD_LIST_VERSION = "0.0.2"
 val MAIN_SCALA = "2.13.5"
 val ALL_SCALA  = Seq(MAIN_SCALA)
 
+val ZIO_EVENT_SOURCING_VERSION = "0.0.1"
+
 val CALIBAN_VERSION = "0.9.4"
 val GRPC_VERSION    = "1.35.0"
 val UZHTTP_VERSION  = "0.2.6"
@@ -134,7 +136,10 @@ lazy val examples =
     .settings(
       name := "examples",
       libraryDependencies ++= Seq(
-        "ch.qos.logback" % "logback-classic" % "1.2.3"
+        "dev.palanga"   %% "zio-event-sourcing" % ZIO_EVENT_SOURCING_VERSION,
+        "dev.palanga"   %% "journal-cassandra"  % ZIO_EVENT_SOURCING_VERSION,
+        "dev.zio"       %% "zio-json"           % "0.1",
+        "ch.qos.logback" % "logback-classic"    % "1.2.3",
       ),
       PB.targets in Compile := Seq(
         scalapb.gen(grpc = true)          -> (sourceManaged in Compile).value,
