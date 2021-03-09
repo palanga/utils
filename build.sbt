@@ -14,7 +14,7 @@ val CALIBAN_VERSION = "0.9.4"
 val GRPC_VERSION    = "1.35.0"
 val UZHTTP_VERSION  = "0.2.6"
 val ZIO_VERSION     = "1.0.3"
-val ZIO_ZMX_VERSION = "0.0.4+69-01a7e756-SNAPSHOT"
+val ZIO_ZMX_VERSION = "0.0.4+83-6a56f908-SNAPSHOT"
 
 inThisBuild(
   List(
