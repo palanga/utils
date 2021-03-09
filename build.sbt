@@ -13,7 +13,7 @@ val ZIO_EVENT_SOURCING_VERSION = "0.0.1"
 val CALIBAN_VERSION = "0.9.4"
 val GRPC_VERSION    = "1.36.0"
 val UZHTTP_VERSION  = "0.2.6"
-val ZIO_VERSION     = "1.0.3"
+val ZIO_VERSION     = "1.0.5"
 val ZIO_ZMX_VERSION = "0.0.4+69-01a7e756-SNAPSHOT"
 
 inThisBuild(
