@@ -14,7 +14,6 @@ import zio.json._
 import zio.{ ExitCode, URIO, ZEnv }
 
 import java.util.UUID
-import scala.language.experimental.macros
 
 object GrpcEventSourcingExample extends zio.App {
 
@@ -44,7 +43,7 @@ object GrpcEventSourcingExample extends zio.App {
   implicit private val museumCodec: Codec[MuseumEvent] =
     Codec(_.toJson, _.fromJson[MuseumEvent].left.map(new Exception(_)))
 
-  private val cassandraSession    = palanga.zio.cassandra.ZCqlSession.layer.default
+  private val cassandraSession    = palanga.zio.cassandra.session.layer.default
   private val paintersJournal     = journal.cassandra.test[PainterEvent].tap(j => initializePainters(j.get))
   private val museumJournal       = journal.cassandra.test[MuseumEvent].tap(j => initializeMuseums(j.get))
   private val paintersEventSource = EventSource.live(painterApplyEvent)
@@ -55,21 +54,21 @@ object GrpcEventSourcingExample extends zio.App {
 
   private def initializePainters(journal: Journal.Service[PainterEvent]) =
     journal
-      .write(UUID.randomUUID() -> PainterEvent.PainterCreated("Remedios Varo"))
-      .flatMap(e => journal.write(e._1 -> PainterEvent.PaintingAdded("La Huida", e._1)))
-      .flatMap(e => journal.write(e._1 -> PainterEvent.PaintingAdded("Mujer Saliendo del Psicoanalista", e._1))) *>
+      .write(UUID.randomUUID(), PainterEvent.PainterCreated("Remedios Varo"))
+      .flatMap(e => journal.write(e._1, PainterEvent.PaintingAdded("La Huida", e._1)))
+      .flatMap(e => journal.write(e._1, PainterEvent.PaintingAdded("Mujer Saliendo del Psicoanalista", e._1))) *>
       journal
-        .write(UUID.randomUUID() -> PainterEvent.PainterCreated("Claude Monet"))
-        .flatMap(e => journal.write(e._1 -> PainterEvent.PaintingAdded("Impression Soleil Levant", e._1)))
+        .write(UUID.randomUUID(), PainterEvent.PainterCreated("Claude Monet"))
+        .flatMap(e => journal.write(e._1, PainterEvent.PaintingAdded("Impression Soleil Levant", e._1)))
 
-  private def initializeMuseums(journal: Journal.Service[MuseumEvent])   =
+  private def initializeMuseums(journal: Journal.Service[MuseumEvent]) =
     journal
-      .write(UUID.randomUUID() -> MuseumEvent.MuseumCreated("Museo de Arte Moderno de Mexico"))
-      .flatMap(e => journal.write(e._1 -> MuseumEvent.PaintingAdded("La Huida", e._1)))
-      .flatMap(e => journal.write(e._1 -> MuseumEvent.PaintingAdded("Mujer Saliendo del Psicoanalista", e._1))) *>
+      .write(UUID.randomUUID(), MuseumEvent.MuseumCreated("Museo de Arte Moderno de Mexico"))
+      .flatMap(e => journal.write(e._1, MuseumEvent.PaintingAdded("La Huida", e._1)))
+      .flatMap(e => journal.write(e._1, MuseumEvent.PaintingAdded("Mujer Saliendo del Psicoanalista", e._1))) *>
       journal
-        .write(UUID.randomUUID() -> MuseumEvent.MuseumCreated("Marmothan Monet"))
-        .flatMap(e => journal.write(e._1 -> MuseumEvent.PaintingAdded("Impression Soleil Levant", e._1)))
+        .write(UUID.randomUUID(), MuseumEvent.MuseumCreated("Marmothan Monet"))
+        .flatMap(e => journal.write(e._1, MuseumEvent.PaintingAdded("Impression Soleil Levant", e._1)))
 
   sealed trait Event
   object Event {
