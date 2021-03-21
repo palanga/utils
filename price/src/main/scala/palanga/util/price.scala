@@ -32,6 +32,13 @@ object price {
         case currency :: amount :: Nil => SinglePrice(BigDecimal(amount), Currency fromStringUnsafe currency)
       }
 
+    case object Zero extends Price {
+      override def +(that: Price): Price                                = that
+      override def *(factor: BigDecimal): Price                         = this
+      override def to(currency: Currency): Rates => Option[SinglePrice] = _ => Some(SinglePrice(0, currency))
+      override protected def changeSign: Price                          = this
+    }
+
     case class SinglePrice(
       amount: Amount,
       currency: Currency,
@@ -64,6 +71,7 @@ object price {
 
       override def +(that: Price): Price =
         that match {
+          case Zero                  => this
           case that: SinglePrice     => CompoundPrice(::(that, prices))
           case CompoundPrice(prices) => CompoundPrice(::(this.prices.head, this.prices.tail concat prices))
         }

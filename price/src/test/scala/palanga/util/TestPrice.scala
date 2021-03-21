@@ -83,6 +83,50 @@ object TestPrice extends DefaultRunnableSpec {
       },
     )
 
+  private val zeroPriceSuite =
+    suite("zero")(
+      test("summing to zero") {
+        val actualPrice   = Price.Zero + Price.Zero
+        val expectedPrice = Price.Zero
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("summing to single") {
+        val actualPrice   = ARS * 100 + Price.Zero
+        val expectedPrice = ARS * 100
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("summing to compound") {
+        val actualPrice   = ARS * 100 + EUR * 20 + Price.Zero
+        val expectedPrice = ARS * 100 + EUR * 20
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("subtracting to zero") {
+        val actualPrice   = Price.Zero - Price.Zero
+        val expectedPrice = Price.Zero
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("subtracting to single") {
+        val actualPrice   = ARS * 100 - Price.Zero
+        val expectedPrice = ARS * 100
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("subtracting to compound") {
+        val actualPrice   = ARS * 100 + EUR * 20 - Price.Zero
+        val expectedPrice = ARS * 100 + EUR * 20
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("multiplying") {
+        val actualPrice   = Price.Zero * 2
+        val expectedPrice = Price.Zero
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("complex operation") {
+        val actualPrice   = (Price.Zero + ARS * 100 - Price.Zero - EUR * 10 + ARS * 200 + Price.Zero) * 2 + ARS * 1
+        val expectedPrice = ARS * 601 - EUR * 20
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+    )
+
   private val toStringSuite =
     suite("to string")(
       test("simple") {
@@ -146,6 +190,7 @@ object TestPrice extends DefaultRunnableSpec {
     suite("util")(
       singlePriceSuite,
       compoundPriceSuite,
+      zeroPriceSuite,
       toStringSuite,
       fromStringSuite,
       toStringIdentitySuite,

@@ -2,7 +2,7 @@ name := "aconcagua"
 
 val ACONCAGUA_VERSION = "0.1.0"
 
-val PRICE_VERSION    = "0.0.2"
+val PRICE_VERSION    = "0.1.0"
 val STD_LIST_VERSION = "0.0.2"
 
 val MAIN_SCALA = "2.13.5"
