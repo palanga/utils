@@ -91,7 +91,6 @@ lazy val core =
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
       fork in Test := true,
       fork in run := true,
-      skip in publish := true,
     )
 
 lazy val graphql =
