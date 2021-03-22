@@ -2,7 +2,7 @@ name := "aconcagua"
 
 val ACONCAGUA_VERSION = "0.1.0"
 
-val PRICE_VERSION    = "0.1.0"
+val PRICE_VERSION    = "0.2.0"
 val STD_LIST_VERSION = "0.0.2"
 
 val MAIN_SCALA = "2.13.5"
@@ -17,6 +17,8 @@ val GRPC_VERSION = "1.36.0"
 val UZHTTP_VERSION = "0.2.6"
 
 val ZIO_VERSION = "1.0.5"
+
+val ZIO_PRELUDE_VERSION = "1.0.0-RC3"
 
 val ZIO_ZMX_VERSION = "0.0.4+69-01a7e756-SNAPSHOT"
 
@@ -67,6 +69,7 @@ lazy val price =
       name := "price",
       version := PRICE_VERSION,
       libraryDependencies ++= Seq(
+        "dev.zio" %% "zio-prelude"  % ZIO_PRELUDE_VERSION,
         "dev.zio" %% "zio-test"     % ZIO_VERSION % "test",
         "dev.zio" %% "zio-test-sbt" % ZIO_VERSION % "test",
       ),

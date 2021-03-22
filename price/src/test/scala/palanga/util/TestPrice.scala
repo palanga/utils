@@ -2,6 +2,7 @@ package palanga.util
 
 import palanga.util.price.Currency._
 import palanga.util.price._
+import zio.prelude.NonEmptyList
 import zio.test.Assertion.{ equalTo, isLessThan, isSome }
 import zio.test._
 
@@ -186,6 +187,27 @@ object TestPrice extends DefaultRunnableSpec {
     )
   }
 
+  private val lawsSuite =
+    suite("laws")(
+      suite("associativity")(
+        test("zero") {
+          val actualPrice   = NonEmptyList(Price.Zero, Price.Zero).sum[Price]
+          val expectedPrice = Price.Zero
+          assert(actualPrice)(equalTo(expectedPrice))
+        },
+        test("single") {
+          val actualPrice   = NonEmptyList(ARS * 500, ARS * 120).sum[Price]
+          val expectedPrice = ARS * 500 + ARS * 120
+          assert(actualPrice)(equalTo(expectedPrice))
+        },
+        test("compound") {
+          val actualPrice   = NonEmptyList(ARS * 500, EUR * 120, Price.Zero).sum
+          val expectedPrice = ARS * 500 + EUR * 120
+          assert(actualPrice)(equalTo(expectedPrice))
+        },
+      )
+    )
+
   override def spec =
     suite("util")(
       singlePriceSuite,
@@ -194,6 +216,7 @@ object TestPrice extends DefaultRunnableSpec {
       toStringSuite,
       fromStringSuite,
       toStringIdentitySuite,
+      lawsSuite,
     )
 
 }

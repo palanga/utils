@@ -1,5 +1,8 @@
 package palanga.util
 
+import zio.prelude.Associative
+import zio.prelude.newtypes.Sum
+
 // TODO remove exponential complexity in CompoundPrice operations
 // TODO use a real NonEmptyList
 object price {
@@ -17,6 +20,8 @@ object price {
   }
 
   object Price {
+
+    implicit val associative: Associative[Sum[Price]] = (l, r) => Sum(l + r)
 
     def fromStringUnsafe(str: String): Price =
       str.split('+').map(singlePriceFromString).reduce[Price](_ + _)
