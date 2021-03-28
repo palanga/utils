@@ -14,7 +14,7 @@ val CALIBAN_VERSION = "0.9.4"
 
 val GRPC_VERSION = "1.36.0"
 
-val UZHTTP_VERSION = "0.2.6"
+val UZHTTP_VERSION = "0.2.7"
 
 val ZIO_VERSION = "1.0.5"
 
