@@ -28,6 +28,11 @@ object TestPrice extends DefaultRunnableSpec {
         val expectedPrice = ARS * -20
         assert(actualPrice)(equalTo(expectedPrice))
       },
+      test("unary minus") {
+        val actualPrice   = -(ARS * 100)
+        val expectedPrice = ARS * -100
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
       test("multiplying") {
         val actualPrice   = (ARS * 100) * 0.3
         val expectedPrice = ARS * 30
@@ -72,6 +77,11 @@ object TestPrice extends DefaultRunnableSpec {
         val expectedPrice = ARS * 110 - EUR * 10
         assert(actualPrice)(equalTo(expectedPrice))
       },
+      test("unary minus") {
+        val actualPrice   = -(ARS * 100 - EUR * 10 + ARS * 10)
+        val expectedPrice = ARS * -110 + EUR * 10
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
       test("multiplying") {
         val actualPrice   = (ARS * 100 + EUR * 10) * 2
         val expectedPrice = ARS * 200 + EUR * 20
@@ -103,6 +113,11 @@ object TestPrice extends DefaultRunnableSpec {
       },
       test("subtracting to zero") {
         val actualPrice   = Price.Zero - Price.Zero
+        val expectedPrice = Price.Zero
+        assert(actualPrice)(equalTo(expectedPrice))
+      },
+      test("unary minus") {
+        val actualPrice   = -Price.Zero
         val expectedPrice = Price.Zero
         assert(actualPrice)(equalTo(expectedPrice))
       },

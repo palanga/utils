@@ -14,6 +14,7 @@ object price {
     def *(factor: BigDecimal): Price
     def to(currency: Currency): Rates => Option[SinglePrice]
     def -(that: Price): Price               = this + that.changeSign
+    def unary_- : Price                     = this.changeSign
     def inARS: Rates => Option[SinglePrice] = to(Currency.ARS)
     def inEUR: Rates => Option[SinglePrice] = to(Currency.EUR)
     protected def changeSign: Price
